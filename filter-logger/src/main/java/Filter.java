@@ -11,6 +11,7 @@ public class Filter {
     public List<Integer> filterOut(List<Integer> source) {
         Logger logger = Logger.getInstance();
         List<Integer> result = new ArrayList<>();
+        logger.log("Начинаем фильтрацию");
         for (Integer i : source) {
             if (i < threshold) {
                 logger.log("Число \"" + i + "\" не проходит");
@@ -19,6 +20,7 @@ public class Filter {
                 logger.log("Число \"" + i + "\" проходит");
             }
         }
+        logger.log("Рубеж фильтрации преодолели %d чисел из %d".formatted(result.size(), source.size()));
         return result;
     }
 }
