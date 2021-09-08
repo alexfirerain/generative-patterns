@@ -1,9 +1,15 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Logger {
     //...
-    protected int num = 1;
+    protected int num;
+    private static final SimpleDateFormat loggerTimeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
 
     public void log(String msg) {
-        System.out.println("[" + num++ + "] " + msg);
+        System.out.printf("#%d [%s] %s%n",
+                ++num, loggerTimeStamp.format(new Date()), msg);
     }
 
     // В этом поле храним ссылку на тот
@@ -22,7 +28,8 @@ public class Logger {
     // мы заполняем в этом методе если оно
     // до того не было заполнено
     public static Logger getInstance() {
-        //...
+        if (logger == null)
+            logger = new Logger();
         return logger;
     }
 }
