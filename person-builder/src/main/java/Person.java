@@ -4,7 +4,7 @@ import java.util.OptionalInt;
 public class Person {
     private final String name, surname;
     private int age = -1;
-    private String address;
+    private String address = null;
 
     public Person(String name, String surname) {
         this.name = name;
@@ -22,7 +22,7 @@ public class Person {
         return age > -1;
     }
     public boolean hasAddress() {
-        return address.equals("");
+        return address != null;
     }
 
     public String getName() {
@@ -32,19 +32,21 @@ public class Person {
         return surname;
     }
     public OptionalInt getAge() {
-        return OptionalInt.of(age);
+        if (hasAge())
+            return OptionalInt.of(age);
+        return OptionalInt.empty();
     }
     public String getAddress() {
-        return hasAddress() ? address : "<без адреса>";
+        return hasAddress() ? address : "";
     }
 
     public String setAddress(String address) {
-        String oldAddress = this.address;
+        String oldAddress = getAddress();
         this.address = address;
         return oldAddress;
     }
     public void happyBirthday() {
-        age++;
+        if (hasAge()) age++;
     }
 
     @Override
@@ -57,16 +59,28 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", address='" + address + '\'' +
-                '}';
+        StringBuilder fio = new StringBuilder("%s %s".formatted(name, surname));
+        if (hasAge() || hasAddress()) {
+            fio.append(" (");
+            if (hasAge()) {
+                fio.append(age);
+                if (hasAddress()) fio.append(", ");
+            }
+            if (hasAddress()) fio.append(address);
+            fio.append(")");
+        }
+        return fio.toString();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( name, surname, age, address );
+        return Objects.hash(name, surname);
+    }
+
+    public PersonBuilder newChildBuilder() {
+        return new PersonBuilder()
+                .setSurname(surname)
+                .setAge(0)
+                .setAddress(address);
     }
 }

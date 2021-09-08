@@ -1,3 +1,4 @@
 rootProject.name = 'generative-patterns'
 include 'person-builder'
+include 'filter-logger'
 
